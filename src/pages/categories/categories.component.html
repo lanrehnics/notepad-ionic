@@ -1,0 +1,24 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Categories</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only clear
+            (click)="newCategory()">
+                <ion-icon name="add">    
+                </ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-list>
+        <button ion-item *ngFor="let category of categories" 
+            (click)="editCategory(category)">
+            {{ category.label }}
+        </button>  
+    </ion-list>
+</ion-content>
