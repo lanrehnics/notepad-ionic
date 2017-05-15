@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, Events } from 'ionic-angular';
+import { NavController, NavParams, ToastController } from 'ionic-angular';
 import { Title } from '@angular/platform-browser';
 
 import { CategoriesFormComponent } from './categories-form.component';
@@ -21,39 +21,38 @@ export class Category {
 })
 
 export class CategoriesComponent  { 
-    title = 'List of categories';
+    title = 'List of Categories';
+
+    result: string;
     public categories: Category[];
 
     constructor(private titleService: Title, 
         private categoriesService: CategoriesService,
         private navController: NavController, 
         private navParams: NavParams,
-        public events: Events){
+        private toastCtrl: ToastController){
         this.titleService.setTitle(this.title);
-        this.events.subscribe('new:category', (category) => {
-            this.addCategory(category);
-        });
-        this.events.subscribe('delete:category', (category) => {
-            this.deleteCategory(category);
-        });
     }
 
     ngOnInit() { 
         this.loadCategories();
+        if (this.navParams.get('result')) {
+            this.result = this.navParams.get('result');
+            this.presentToast();
+        }
     }
 
     loadCategories() {
         this.categoriesService.getCategories().subscribe(
-            data => { this.categories = data },
-            err => console.log(err),
-            () => console.log(this.categories)
+            data => { 
+                if(data.hasOwnProperty('error')) {
+                    this.result = "There is no Categories yet."
+                } else {
+                    this.categories = data;
+                }
+            },
+            err => this.result = "Cannot fetch Categories. Please verify your internet connection."
         );
-    }
-
-    editCategory(category: Category){
-        this.navController.push(CategoriesFormComponent, {
-            category: category
-        });
     }
 
     newCategory(){
@@ -62,16 +61,19 @@ export class CategoriesComponent  {
         });
     }
 
-    addCategory(category: Category) {
-        this.categories.push(category);
+    editCategory(category: Category){
+        this.navController.push(CategoriesFormComponent, {
+            category: category
+        });
     }
 
-    deleteCategory(category: Category) {
-        console.log('hey');
-        //console.log(this.categories.findIndex(item => item.id === category.id));
-        let index: number = this.categories.indexOf(category);
-        if (index !== -1) {
-            this.categories.splice(index, 1);
-        }  
+    presentToast() {
+        let toast = this.toastCtrl.create({
+            message: this.result,
+            duration: 3000,
+            position: 'bottom'
+        });
+
+        toast.present();
     }
 }

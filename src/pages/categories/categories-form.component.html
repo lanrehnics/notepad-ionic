@@ -15,10 +15,10 @@
         </ion-item>
         <ion-buttons end>
             <button ion-button color="danger"
-            (click)="delCategory()">Delete
+            *ngIf="modCategory.id != 0" (click)="delCategory()">Delete
             </button>
             <button ion-button type="submit" 
             [disabled]="!catForm.valid">Save</button>
         </ion-buttons>
-	</form>
+    </form>
 </ion-content>

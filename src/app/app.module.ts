@@ -5,6 +5,8 @@ import { ReactiveFormsModule }   from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { NotepadApp } from './app.component';
+import { NotesComponent } from '../pages/notes/notes.component';
+import { NotesFormComponent } from '../pages/notes/notes-form.component';
 import { CategoriesComponent } from '../pages/categories/categories.component';
 import { CategoriesFormComponent } from '../pages/categories/categories-form.component';
 
@@ -12,27 +14,32 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 @NgModule({
-  declarations: [
-    NotepadApp,
-    CategoriesComponent,
-    CategoriesFormComponent
-  ],
-  imports: [
-    BrowserModule,
-    HttpModule,
-    ReactiveFormsModule,
-    IonicModule.forRoot(NotepadApp),
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    NotepadApp,
-    CategoriesComponent,
-    CategoriesFormComponent
-  ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
-  ]
+    declarations: [
+        NotepadApp,
+        NotesComponent,
+        NotesFormComponent,
+        CategoriesComponent,
+        CategoriesFormComponent
+    ],
+    imports: [
+        BrowserModule,
+        HttpModule,
+        ReactiveFormsModule,
+        IonicModule.forRoot(NotepadApp),
+    ],
+    bootstrap: [IonicApp],
+    entryComponents: [
+        NotepadApp,
+        NotesComponent,
+        NotesFormComponent,
+        CategoriesComponent,
+        CategoriesFormComponent
+    ],
+    providers: [
+        StatusBar,
+        SplashScreen,
+        {provide: ErrorHandler, useClass: IonicErrorHandler}
+    ]
 })
+
 export class AppModule {}

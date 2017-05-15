@@ -1,0 +1,37 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>New Note</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <form [formGroup]="noteForm" (ngSubmit)="saveNote()">
+        <ion-item>
+            <ion-label stacked>Title</ion-label>
+            <ion-input type="text" formControlName="title"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label stacked>Content</ion-label>
+            <ion-textarea type="text" formControlName="content" rows="15"></ion-textarea>
+        </ion-item>
+        <ion-item>
+            <ion-label stacked>Category</ion-label>
+            <ion-select [(ngModel)]="modNote.category" formControlName="category">
+                <ion-option *ngFor="let category of categories"
+                [value] = "category"
+                [selected]="modNote.category == category">
+                {{ category.label }}</ion-option>
+            </ion-select>
+        </ion-item>
+        <ion-buttons end>
+            <button ion-button color="danger"
+            *ngIf="modNote.id != 0" (click)="delNote()">Delete
+            </button>
+            <button ion-button type="submit" 
+            [disabled]="!noteForm.valid">Save</button>
+        </ion-buttons>
+    </form>
+</ion-content>

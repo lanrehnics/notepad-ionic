@@ -1,0 +1,27 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Notes</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only clear
+            (click)="newNote()">
+                <ion-icon name="add">    
+                </ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-list>
+        <button ion-item *ngFor="let note of notes" 
+            (click)="editNote(note)">
+            <h2>{{ note.title }}</h2>
+            <h3>{{ note.category.label }}</h3>
+            <p>{{ note.content }}</p>
+            <h3>{{ note.date.timestamp * 1000 | date }}</h3>
+        </button> 
+    </ion-list>
+</ion-content>
