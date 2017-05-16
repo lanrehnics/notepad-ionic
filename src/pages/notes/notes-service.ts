@@ -22,7 +22,6 @@ export class NotesService {
             content: note.content,
             categoryId: note.category.id
         }
-        //console.log(newNote);
         return this.http.post(this.notesUrl, 
             JSON.stringify(newNote), {})
             .map((res:Response) => res.json());
@@ -35,14 +34,12 @@ export class NotesService {
             content: note.content,
             categoryId: note.category.id
         }
-        //console.log(editedNote);
         return this.http.put(this.notesUrl, 
             JSON.stringify(editedNote), {})
             .map((res:Response) => res.json());
     }
 
     deleteNote(id: number) {
-        //console.log(this.notesUrl + "/" + id.toString());
         return this.http.delete(this.notesUrl + "/" + id.toString(),
             {})
             .map((res:Response) => res.json());

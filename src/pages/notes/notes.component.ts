@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, ToastController } from 'ionic-angular';
-import { Title } from '@angular/platform-browser';
+import { NavController, NavParams, ToastController, Events } from 'ionic-angular';
 
 import { NotesFormComponent } from './notes-form.component';
 import { Category } from '../categories/categories.component';
@@ -27,25 +26,23 @@ export class Note {
 })
 
 export class NotesComponent  { 
-    title = 'List of Notes';
-
     result: string;
     public notes: Note[];
 
-    constructor(private titleService: Title, 
-        private notesService: NotesService,
+    constructor(private notesService: NotesService,
         private navController: NavController, 
         private navParams: NavParams,
-        private toastCtrl: ToastController){
-        this.titleService.setTitle(this.title);
+        private toastCtrl: ToastController,
+        public events: Events){
     }
 
     ngOnInit() { 
         this.loadNotes();
-        if (this.navParams.get('result')) {
-            this.result = this.navParams.get('result');
+        this.events.subscribe('result', (result) => {
+            this.result = result;
+            this.loadNotes();
             this.presentToast();
-        }
+        });
     }
 
     loadNotes() {
@@ -62,9 +59,7 @@ export class NotesComponent  {
     }
 
     newNote(){
-        this.navController.push(NotesFormComponent, {
-            note: new Note(0, "", "", new Category(0, ""))
-        });
+        this.navController.push(NotesFormComponent);
     }
 
     editNote(note: Note){

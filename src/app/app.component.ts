@@ -9,6 +9,8 @@ import { NotesFormComponent } from '../pages/notes/notes-form.component';
 import { CategoriesComponent } from '../pages/categories/categories.component';
 import { CategoriesFormComponent } from '../pages/categories/categories-form.component';
 
+import { AboutComponent } from '../pages/about/about.component';
+
 @Component({
     templateUrl: 'app.html'
 })
@@ -28,14 +30,15 @@ export class NotepadApp {
             { title: 'Notes', component: NotesComponent },
             { title: 'Categories', component: CategoriesComponent },
             { title: 'New Note', component: NotesFormComponent },
-            { title: 'New Category', component: CategoriesFormComponent }
+            { title: 'New Category', component: CategoriesFormComponent },
+            { title: 'About', component: AboutComponent }
         ];
     }
 
     initializeApp() {
         this.platform.ready().then(() => {
-        this.statusBar.styleDefault();
-        this.splashScreen.hide();
+            this.statusBar.styleDefault();
+            this.splashScreen.hide();
         });
     }
 

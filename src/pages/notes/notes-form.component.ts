@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, ToastController } from 'ionic-angular';
+import { NavController, NavParams, ToastController, Events } from 'ionic-angular';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
 
 import { Note, NotesComponent } from './notes.component';
 import { Category } from '../categories/categories.component';
@@ -15,8 +14,6 @@ import { NotesService } from './notes-service';
 })
 
 export class NotesFormComponent { 
-    title = 'New Note';
-
     public categories: Category[];
     modNote: Note;
     result: string;
@@ -25,14 +22,14 @@ export class NotesFormComponent {
     noteContent = new FormControl("", Validators.required);
     noteCategory = new FormControl(new Category(0, ''), Validators.required);
 
-    constructor(private titleService: Title, 
-        private notesService: NotesService,
+    constructor(private notesService: NotesService,
         private categoriesService: CategoriesService,
         private fb: FormBuilder,
         private navController: NavController, 
         private navParams: NavParams,
-        private toastCtrl: ToastController){
-        this.titleService.setTitle(this.title);
+        private toastCtrl: ToastController,
+        public events: Events){
+        this.modNote = new Note(0, "", "", new Category(0, ""));
         this.noteForm = this.fb.group({
             title: this.noteTitle,
             content: this.noteContent,
@@ -47,14 +44,13 @@ export class NotesFormComponent {
 
     createForm() {
         if (this.navParams.get('note')) {
-            this.titleService.setTitle('Edit Note');
             this.modNote = this.navParams.get('note');
-            this.noteForm.setValue({
-                title: this.modNote.title,
-                content: this.modNote.content,
-                category: this.modNote.category,
-            })
         }
+        this.noteForm.setValue({
+            title: this.modNote.title,
+            content: this.modNote.content,
+            category: this.modNote.category,
+        });
     }
 
     loadCategories() {
@@ -75,9 +71,12 @@ export class NotesFormComponent {
             data => { 
                 if(data.success) {
                     this.result = "Note added successfuly!";
-                    this.navController.push(NotesComponent, {
-                        result: this.result
-                    });
+                    this.events.publish('result', this.result);
+                    if(this.navController.canGoBack()) {
+                        this.navController.pop();
+                    } else {
+                        this.navController.push(NotesComponent);
+                    }
                 } else if(data.failure) {
                     this.result = "Note has not been added, please try again.";
                     this.presentToast();
@@ -92,9 +91,12 @@ export class NotesFormComponent {
             data => { 
                 if(data.success) {
                     this.result = "Note edited successfuly!";
-                    this.navController.push(NotesComponent, {
-                        result: this.result
-                    });
+                    this.events.publish('result', this.result);
+                    if(this.navController.canGoBack()) {
+                        this.navController.pop();
+                    } else {
+                        this.navController.push(NotesComponent);
+                    }
                 } else if(data.failure) {
                     this.result = "Note has not been edited, please try again.";
                     this.presentToast();
@@ -113,9 +115,12 @@ export class NotesFormComponent {
             data => { 
                 if(data.success) {
                     this.result = "Note deleted successfuly!";
-                    this.navController.push(NotesComponent, {
-                        result: this.result 
-                    });
+                    this.events.publish('result', this.result);
+                    if(this.navController.canGoBack()) {
+                        this.navController.pop();
+                    } else {
+                        this.navController.push(NotesComponent);
+                    }
                 } else if(data.failure) {
                     this.result = "Note has not been delete, please try again.";
                     this.presentToast();
@@ -130,10 +135,11 @@ export class NotesFormComponent {
     }
 
     saveNote() {
-        //console.log(this.noteForm.value);
+        let modCat: Category;
+        modCat = this.categories.find(category => category.id === this.noteForm.value.category);
         this.modNote.title = this.noteForm.value.title;
         this.modNote.content = this.noteForm.value.content;
-        this.modNote.category = this.noteForm.value.category;
+        this.modNote.category = modCat;
         if(this.modNote.id == 0){
             this.newNote(this.modNote);     
         } else {

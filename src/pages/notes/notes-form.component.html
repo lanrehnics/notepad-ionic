@@ -3,7 +3,7 @@
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>New Note</ion-title>
+        <ion-title>Note</ion-title>
     </ion-navbar>
 </ion-header>
 
@@ -15,14 +15,14 @@
         </ion-item>
         <ion-item>
             <ion-label stacked>Content</ion-label>
-            <ion-textarea type="text" formControlName="content" rows="15"></ion-textarea>
+            <ion-textarea type="text" formControlName="content" rows="10"></ion-textarea>
         </ion-item>
         <ion-item>
             <ion-label stacked>Category</ion-label>
-            <ion-select [(ngModel)]="modNote.category" formControlName="category">
+            <ion-select [(ngModel)]="modNote.category.id" formControlName="category">
                 <ion-option *ngFor="let category of categories"
-                [value] = "category"
-                [selected]="modNote.category == category">
+                [value] = "category.id"
+                [selected]="modNote.category.id == category.id">
                 {{ category.label }}</ion-option>
             </ion-select>
         </ion-item>

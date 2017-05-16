@@ -3,14 +3,14 @@
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>New Category</ion-title>
+        <ion-title>Category</ion-title>
     </ion-navbar>
 </ion-header>
 
 <ion-content padding>
     <form [formGroup]="catForm" (ngSubmit)="saveCategory()">
         <ion-item>
-            <ion-label>Label</ion-label>
+            <ion-label stacked>Label</ion-label>
             <ion-input type="text" formControlName="label"></ion-input>
         </ion-item>
         <ion-buttons end>

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, ToastController } from 'ionic-angular';
-import { Title } from '@angular/platform-browser';
+import { NavController, NavParams, ToastController, Events } from 'ionic-angular';
 
 import { CategoriesFormComponent } from './categories-form.component';
 import { CategoriesService } from './categories-service';
@@ -21,25 +20,23 @@ export class Category {
 })
 
 export class CategoriesComponent  { 
-    title = 'List of Categories';
-
     result: string;
     public categories: Category[];
 
-    constructor(private titleService: Title, 
-        private categoriesService: CategoriesService,
+    constructor(private categoriesService: CategoriesService,
         private navController: NavController, 
         private navParams: NavParams,
-        private toastCtrl: ToastController){
-        this.titleService.setTitle(this.title);
+        private toastCtrl: ToastController,
+        public events: Events){
     }
 
     ngOnInit() { 
         this.loadCategories();
-        if (this.navParams.get('result')) {
-            this.result = this.navParams.get('result');
+        this.events.subscribe('result', (result) => {
+            this.result = result;
+            this.loadCategories();
             this.presentToast();
-        }
+        });
     }
 
     loadCategories() {
@@ -56,9 +53,7 @@ export class CategoriesComponent  {
     }
 
     newCategory(){
-        this.navController.push(CategoriesFormComponent, {
-            category: new Category(0, "")
-        });
+        this.navController.push(CategoriesFormComponent);
     }
 
     editCategory(category: Category){

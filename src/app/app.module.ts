@@ -9,6 +9,7 @@ import { NotesComponent } from '../pages/notes/notes.component';
 import { NotesFormComponent } from '../pages/notes/notes-form.component';
 import { CategoriesComponent } from '../pages/categories/categories.component';
 import { CategoriesFormComponent } from '../pages/categories/categories-form.component';
+import { AboutComponent } from '../pages/about/about.component';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -19,7 +20,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
         NotesComponent,
         NotesFormComponent,
         CategoriesComponent,
-        CategoriesFormComponent
+        CategoriesFormComponent,
+        AboutComponent
     ],
     imports: [
         BrowserModule,
@@ -33,7 +35,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
         NotesComponent,
         NotesFormComponent,
         CategoriesComponent,
-        CategoriesFormComponent
+        CategoriesFormComponent,
+        AboutComponent
     ],
     providers: [
         StatusBar,

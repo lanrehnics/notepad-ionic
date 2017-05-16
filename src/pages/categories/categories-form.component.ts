@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, ToastController } from 'ionic-angular';
+import { NavController, NavParams, ToastController, Events } from 'ionic-angular';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
 
 import { Category, CategoriesComponent } from './categories.component';
 import { CategoriesService } from './categories-service';
@@ -12,21 +11,19 @@ import { CategoriesService } from './categories-service';
     providers: [ CategoriesService ]
 })
 
-export class CategoriesFormComponent { 
-    title = 'New Category';
-
+export class CategoriesFormComponent {
     modCategory: Category;
     result: string;
     catForm: FormGroup;
     catLabel = new FormControl("", Validators.required);
 
-    constructor(private titleService: Title, 
-        private categoriesService: CategoriesService,
+    constructor(private categoriesService: CategoriesService,
         private fb: FormBuilder,
         private navController: NavController, 
         private navParams: NavParams,
-        private toastCtrl: ToastController){
-        this.titleService.setTitle(this.title);
+        private toastCtrl: ToastController,
+        public events: Events){
+        this.modCategory = new Category(0, "");
         this.catForm = this.fb.group({
             label: this.catLabel,
         });
@@ -38,12 +35,11 @@ export class CategoriesFormComponent {
 
     createForm() {
         if (this.navParams.get('category')) {
-            this.titleService.setTitle('Edit Category');
             this.modCategory = this.navParams.get('category');
-            this.catForm.setValue({
-                label: this.modCategory.label,
-            })
         }
+        this.catForm.setValue({
+            label: this.modCategory.label,
+        })
     }
 
     newCategory(cat: Category) {
@@ -51,11 +47,14 @@ export class CategoriesFormComponent {
             data => { 
                 if(data.success) {
                     this.result = "Category added successfuly!";
-                    this.navController.push(CategoriesComponent, {
-                        result: this.result
-                    });
+                    this.events.publish('result', this.result);
+                    if(this.navController.canGoBack()) {
+                        this.navController.pop();
+                    } else {
+                        this.navController.push(CategoriesComponent);
+                    }
                 } else if(data.failure) {
-                    this.result = "Category has not been edited, please try again.";
+                    this.result = "Category has not been added, please try again.";
                     this.presentToast();
                 } 
             },
@@ -68,9 +67,12 @@ export class CategoriesFormComponent {
             data => { 
                 if(data.success) {
                     this.result = "Category edited successfuly!";
-                    this.navController.push(CategoriesComponent, {
-                        result: this.result
-                    });
+                    this.events.publish('result', this.result);
+                    if(this.navController.canGoBack()) {
+                        this.navController.pop();
+                    } else {
+                        this.navController.push(CategoriesComponent);
+                    }
                 } else if(data.failure) {
                     this.result = "Category has not been edited, please try again.";
                     this.presentToast();
@@ -89,9 +91,12 @@ export class CategoriesFormComponent {
             data => { 
                 if(data.success) {
                     this.result = "Category deleted successfuly!";
-                    this.navController.push(CategoriesComponent, {
-                        result: this.result 
-                    });
+                    this.events.publish('result', this.result);
+                    if(this.navController.canGoBack()) {
+                        this.navController.pop();
+                    } else {
+                        this.navController.push(CategoriesComponent);
+                    }
                 } else if(data.failure) {
                     this.result = "Category has not been delete, please try again.";
                     this.presentToast();

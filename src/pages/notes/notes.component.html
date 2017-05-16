@@ -18,10 +18,14 @@
     <ion-list>
         <button ion-item *ngFor="let note of notes" 
             (click)="editNote(note)">
-            <h2>{{ note.title }}</h2>
-            <h3>{{ note.category.label }}</h3>
-            <p>{{ note.content }}</p>
-            <h3>{{ note.date.timestamp * 1000 | date }}</h3>
+            <div>
+                <h2>{{ note.title }}</h2>
+                <h3 text-right>{{ note.category.label }}</h3>
+            </div>
+            <p text-wrap>
+                {{ note.content }}
+            </p>
+            <h3 text-right>{{ note.date.timestamp * 1000 | date }}</h3>
         </button> 
     </ion-list>
 </ion-content>
